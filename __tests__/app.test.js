@@ -165,4 +165,20 @@ describe("/api/articles/:article_id/comments", () => {
         expect(response.body.comments.length).toEqual(0);
       });
   });
+  test('POST: 201 responds with a comment object of the posted comment', () => {
+    return request(app)
+    .post("/api/articles/9/comments")
+    .send({username: "icellusedkars", body: "This is a test comment"})
+    .expect(201)
+    .then((response) => {
+      expect(response.body.comment).toEqual({
+        body: "This is a test comment",
+        votes: 0,
+        author: "icellusedkars",
+        article_id: 9,
+        created_at: expect.any(String),
+        comment_id: expect.any(Number)
+      })
+    })
+  });
 });
