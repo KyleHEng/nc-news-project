@@ -62,6 +62,7 @@ describe("/api/articles/:article_id", () => {
       .get("/api/articles/1")
       .expect(200)
       .then((response) => {
+        console.log(response.body.article.article_img_url)
         expect(response.body.article).toEqual(
           expect.objectContaining({
             title: expect.any(String),
