@@ -27,8 +27,8 @@ describe("GET /api", () => {
   });
 });
 
-describe("GET /api/topics", () => {
-  test("200: Responds with an object detailing all the topics", () => {
+describe("/api/topics", () => {
+  test("GET 200: Responds with an object detailing all the topics", () => {
     return request(app)
       .get("/api/topics")
       .expect(200)
@@ -42,5 +42,16 @@ describe("GET /api/topics", () => {
           );
         });
       });
+  });
+});
+
+describe('/notAnEndpoint', () => {
+  test('404: Responds with an object informing that the endpoint was not found', () => {
+    return request(app)
+    .get("/notAnEndpoint")
+    .expect(404)
+    .then((response) => {
+      expect(response.body.error).toBe("Endpoint not found")
+    })
   });
 });

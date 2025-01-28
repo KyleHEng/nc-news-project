@@ -8,4 +8,16 @@ app.get("/api", (req, res) => {
 });
 
 app.get("/api/topics", getTopics);
+
+//error handling middleware
+app.all("*", (req, res) => {
+
+  res.status(404).send({error: "Endpoint not found"})
+})
+
+
+
+app.use((err, req, res, next) => {
+    
+})
 module.exports = app;
