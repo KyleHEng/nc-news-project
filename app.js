@@ -16,7 +16,7 @@ app.get("/api/topics", getTopics);
 
 app.get("/api/articles/:article_id", getArticlesByID);
 
-app.get("/api/articles", getArticles);
+// app.get("/api/articles", getArticles);
 //error handling middleware
 app.all("*", (req, res) => {
   res.status(404).send({ error: "Endpoint not found" });

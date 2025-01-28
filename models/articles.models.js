@@ -10,19 +10,19 @@ function selectArticlesByID(id) {
     });
 }
 
-function selectArticles() {
-  return db
-    .query(
-      `
-        SELECT articles.*, COUNT(comment_id)::INT as comment_count 
-        FROM articles 
-        JOIN comments ON comments.article_id = articles.article_id
-        GROUP BY articles.article_id;
-        `
-    )
-    .then(({ rows }) => {
-      return rows;
-    });
-}
+// function selectArticles() {
+//   return db
+//     .query(
+//       `
+//         SELECT articles.*, COUNT(comment_id)::INT as comment_count 
+//         FROM articles 
+//         JOIN comments ON comments.article_id = articles.article_id
+//         GROUP BY articles.article_id;
+//         `
+//     )
+//     .then(({ rows }) => {
+//       return rows;
+//     });
+// }
 
-module.exports = { selectArticlesByID, selectArticles };
+module.exports = { selectArticlesByID, /*selectArticles*/ };
