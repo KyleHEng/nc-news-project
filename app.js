@@ -1,6 +1,8 @@
 const express = require("express");
 const endpoints = require("./endpoints.json");
 const { getTopics } = require("./controllers/topics.controller");
+const { getArticlesByID } = require("./controllers/articles.controller");
+
 const app = express();
 
 app.get("/api", (req, res) => {
@@ -8,6 +10,8 @@ app.get("/api", (req, res) => {
 });
 
 app.get("/api/topics", getTopics);
+
+app.get("/api/articles/:article_id", getArticlesByID);
 
 //error handling middleware
 app.all("*", (req, res) => {

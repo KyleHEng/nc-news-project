@@ -45,13 +45,35 @@ describe("/api/topics", () => {
   });
 });
 
-describe('/notAnEndpoint', () => {
-  test('404: Responds with an object informing that the endpoint was not found', () => {
+describe("/notAnEndpoint", () => {
+  test("404: Responds with an object informing that the endpoint was not found", () => {
     return request(app)
-    .get("/notAnEndpoint")
-    .expect(404)
-    .then((response) => {
-      expect(response.body.error).toBe("Endpoint not found")
-    })
+      .get("/notAnEndpoint")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.error).toBe("Endpoint not found");
+      });
+  });
+});
+
+describe("/api/articles/:article_id", () => {
+  test("GET: 200 responds with an article object with correct properties", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.article).toEqual(
+          expect.objectContaining({
+            title: expect.any(String),
+            topic: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+            article_id: expect.any(Number),
+          })
+        );
+      });
   });
 });
