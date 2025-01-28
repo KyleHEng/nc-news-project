@@ -76,4 +76,20 @@ describe("/api/articles/:article_id", () => {
         );
       });
   });
+  test('GET: 400 responds with error message for malformed parameters', () => {
+    return request(app)
+    .get("/api/articles/NotANumber")
+    .expect(400)
+    .then((response) => {
+      expect(response.body.msg).toEqual("Bad request")
+    })
+  });
+  test('GET: 404 responds with error message when article id not found', () => {
+    return request(app)
+    .get("/api/articles/500")
+    .expect(404)
+    .then((response) => {
+      expect(response.body.msg).toEqual("Article ID not found")
+    })
+  });
 });
