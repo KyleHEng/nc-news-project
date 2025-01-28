@@ -25,4 +25,6 @@ function getArticles(req, res, next) {
     });
 }
 
-module.exports = { getArticlesByID, getArticles };
+
+
+module.exports = { getArticlesByID, getArticles,  };
