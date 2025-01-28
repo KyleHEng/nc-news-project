@@ -62,7 +62,6 @@ describe("/api/articles/:article_id", () => {
       .get("/api/articles/1")
       .expect(200)
       .then((response) => {
-        console.log(response.body.article.article_img_url)
         expect(response.body.article).toEqual(
           expect.objectContaining({
             title: expect.any(String),
@@ -77,20 +76,45 @@ describe("/api/articles/:article_id", () => {
         );
       });
   });
-  test('GET: 400 responds with error message for malformed parameters', () => {
+  test("GET: 400 responds with error message for malformed parameters", () => {
     return request(app)
-    .get("/api/articles/NotANumber")
-    .expect(400)
-    .then((response) => {
-      expect(response.body.msg).toEqual("Bad request")
-    })
+      .get("/api/articles/NotANumber")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toEqual("Bad request");
+      });
   });
-  test('GET: 404 responds with error message when article id not found', () => {
+  test("GET: 404 responds with error message when article id not found", () => {
     return request(app)
-    .get("/api/articles/500")
-    .expect(404)
-    .then((response) => {
-      expect(response.body.msg).toEqual("Article ID not found")
-    })
+      .get("/api/articles/500")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toEqual("Article ID not found");
+      });
+  });
+});
+
+describe("/api/articles", () => {
+  test.only("GET: 200 responds with an articles array of article objects with correct properties", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((response) => {
+        response.body.articles.forEach((article) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+              title: expect.any(String),
+              topic: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              article_img_url: expect.any(String),
+              article_id: expect.any(Number),
+              comment_count: expect.any(Number),
+            })
+          );
+        });
+      });
   });
 });
