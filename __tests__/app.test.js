@@ -95,7 +95,7 @@ describe("/api/articles/:article_id", () => {
 });
 
 describe("/api/articles", () => {
-  test.only("GET: 200 responds with an articles array of article objects with correct properties", () => {
+  test("GET: 200 responds with an articles array of article objects with correct properties", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
@@ -117,4 +117,27 @@ describe("/api/articles", () => {
         });
       });
   });
+});
+
+describe("/api/articles/:article_id/comments", () => {
+  test('GET: 200 responds with an array of comments for the given article id, with the correct properties', () => {
+    return request(app)
+    .get("/api/articles/1/comments")
+    .expect(200)
+    .then((response) => {
+      response.body.comments.forEach((comment) => {
+        expect(comment).toEqual(
+          expect.objectContaining({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            article_id: expect.any(Number)
+          })
+        )
+      })
+    })
+  });
+
 });
