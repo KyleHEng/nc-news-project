@@ -94,27 +94,27 @@ describe("/api/articles/:article_id", () => {
   });
 });
 
-// describe("/api/articles", () => {
-//   test.only("GET: 200 responds with an articles array of article objects with correct properties", () => {
-//     return request(app)
-//       .get("/api/articles")
-//       .expect(200)
-//       .then((response) => {
-//         response.body.articles.forEach((article) => {
-//           expect(article).toEqual(
-//             expect.objectContaining({
-//               title: expect.any(String),
-//               topic: expect.any(String),
-//               author: expect.any(String),
-//               body: expect.any(String),
-//               created_at: expect.any(String),
-//               votes: expect.any(Number),
-//               article_img_url: expect.any(String),
-//               article_id: expect.any(Number),
-//               comment_count: expect.any(Number),
-//             })
-//           );
-//         });
-//       });
-//   });
-// });
+describe("/api/articles", () => {
+  test.only("GET: 200 responds with an articles array of article objects with correct properties", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((response) => {
+        response.body.articles.forEach((article) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+              title: expect.any(String),
+              topic: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              article_img_url: expect.any(String),
+              article_id: expect.any(Number),
+              comment_count: expect.any(Number),
+            })
+          );
+        });
+      });
+  });
+});
