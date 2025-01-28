@@ -15,14 +15,14 @@ function getArticlesByID(req, res, next) {
     });
 }
 
-function getArticles(req, res, next) {
-  return selectArticles()
-    .then((articleInfo) => {
-      res.status(200).send({ articles: articleInfo });
-    })
-    .catch((error) => {
-      next(error);
-    });
-}
+// function getArticles(req, res, next) {
+//   return selectArticles()
+//     .then((articleInfo) => {
+//       res.status(200).send({ articles: articleInfo });
+//     })
+//     .catch((error) => {
+//       next(error);
+//     });
+// }
 
-module.exports = { getArticlesByID, getArticles };
+module.exports = { getArticlesByID, /*getArticles*/ };
