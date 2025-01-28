@@ -120,24 +120,49 @@ describe("/api/articles", () => {
 });
 
 describe("/api/articles/:article_id/comments", () => {
-  test('GET: 200 responds with an array of comments for the given article id, with the correct properties', () => {
+  test("GET: 200 responds with an array of comments for the given article id, sorted by most recent comment, with the correct properties", () => {
     return request(app)
-    .get("/api/articles/1/comments")
-    .expect(200)
-    .then((response) => {
-      response.body.comments.forEach((comment) => {
-        expect(comment).toEqual(
-          expect.objectContaining({
-            comment_id: expect.any(Number),
-            votes: expect.any(Number),
-            created_at: expect.any(String),
-            author: expect.any(String),
-            body: expect.any(String),
-            article_id: expect.any(Number)
-          })
-        )
-      })
-    })
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then((response) => {
+        response.body.comments.forEach((comment) => {
+          expect(comment).toEqual(
+            expect.objectContaining({
+              comment_id: expect.any(Number),
+              votes: expect.any(Number),
+              created_at: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              article_id: expect.any(Number),
+            })
+          );
+        });
+        expect(response.body.comments).toBeSortedBy("created_at");
+      });
   });
-
+  test("GET: 400 responds with an error message when given a malformed article id", () => {
+    return request(app)
+      .get("/api/articles/abcdefg/comments")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toEqual("Bad request");
+      });
+  });
+  test("GET: 404 responds with error message when article id not found", () => {
+    return request(app)
+      .get("/api/articles/567/comments")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toEqual("Article ID not found");
+      });
+  });
+  test("GET: 200 responds with an empty array when given an article id with no comments", () => {
+    return request(app)
+      .get("/api/articles/2/comments")
+      .expect(200)
+      .then((response) => {
+        expect(Array.isArray(response.body.comments)).toEqual(true);
+        expect(response.body.comments.length).toEqual(0);
+      });
+  });
 });
