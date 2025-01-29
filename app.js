@@ -4,6 +4,7 @@ const { getTopics } = require("./controllers/topics.controller");
 const {
   getArticlesByID,
   getArticles,
+  patchArticleByArticleID,
 } = require("./controllers/articles.controller");
 const {
   getCommentsByArticleID,
@@ -28,6 +29,7 @@ app.get("/api/articles/:article_id/comments", getCommentsByArticleID);
 
 app.post("/api/articles/:article_id/comments", postCommentByArticleId);
 
+app.patch("/api/articles/:article_id", patchArticleByArticleID);
 //error handling middleware
 app.all("*", (req, res) => {
   res.status(404).send({ error: "Endpoint not found" });

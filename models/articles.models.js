@@ -25,4 +25,26 @@ function selectArticles() {
     });
 }
 
-module.exports = { selectArticlesByID, selectArticles };
+function updateArticleByArticleID(voteIncrement, id) {
+  return db
+    .query(
+      `
+    UPDATE articles
+    SET
+      votes = votes + $1
+    WHERE
+      article_id = $2
+    RETURNING *;
+    `,
+      [voteIncrement, id]
+    )
+    .then(({ rows }) => {
+      return rows[0];
+    });
+}
+
+module.exports = {
+  selectArticlesByID,
+  selectArticles,
+  updateArticleByArticleID,
+};

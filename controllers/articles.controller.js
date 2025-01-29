@@ -1,6 +1,7 @@
 const {
   selectArticlesByID,
   selectArticles,
+  updateArticleByArticleID,
 } = require("../models/articles.models");
 
 function getArticlesByID(req, res, next) {
@@ -25,6 +26,17 @@ function getArticles(req, res, next) {
     });
 }
 
+function patchArticleByArticleID(req, res, next) {
+  const { inc_votes } = req.body,
+    { article_id } = req.params;
 
+  return updateArticleByArticleID(inc_votes, article_id)
+    .then((articleInfo) => {
+      res.status(200).send({ article: articleInfo });
+    })
+    .catch((error) => {
+      next(error);
+    });
+}
 
-module.exports = { getArticlesByID, getArticles,  };
+module.exports = { getArticlesByID, getArticles, patchArticleByArticleID };
