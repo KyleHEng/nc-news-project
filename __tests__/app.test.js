@@ -112,6 +112,24 @@ describe("/api/articles/:article_id", () => {
         });
       });
   });
+  test("PATCH: 400 responds with error message when given malformed request data", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({ inc_votes: "seven" })
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toEqual("Bad request");
+      });
+  });
+  test("PATCH: 404 responds with error message when article id not found", () => {
+    return request(app)
+      .patch("/api/articles/193")
+      .send({ inc_votes: 73 })
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toEqual("Article ID not found");
+      });
+  });
 });
 
 describe("/api/articles", () => {
