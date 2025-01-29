@@ -181,4 +181,31 @@ describe("/api/articles/:article_id/comments", () => {
       })
     })
   });
+  test('POST: 400 responds with error message when given malformed comment', () => {
+    return request(app)
+    .post("/api/articles/2/comments")
+    .send({name: "icellusedkars", body: "Still a test comment"})
+    .expect(400)
+    .then((response) => {
+      expect(response.body.msg).toEqual("Bad request")
+    })
+  });
+  test('POST: 404 responds with error message when id not found', () => {
+    return request(app)
+    .post("/api/articles/353/comments")
+    .send({username: "icellusedkars", body: "This is a test comment"})
+    .expect(404)
+    .then((response) => {
+      expect(response.body.msg).toEqual("Article ID not found")
+    })
+  });
+  test('POST: 404 responds with error message when username not found', () => {
+    return request(app)
+    .post("/api/articles/2/comments")
+    .send({username: "userA", body: "This is a test comment"})
+    .expect(404)
+    .then((response) => {
+      expect(response.body.msg).toEqual("Required request details not found")
+    })
+  });
 });
