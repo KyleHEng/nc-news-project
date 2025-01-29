@@ -165,4 +165,47 @@ describe("/api/articles/:article_id/comments", () => {
         expect(response.body.comments.length).toEqual(0);
       });
   });
+  test('POST: 201 responds with a comment object of the posted comment', () => {
+    return request(app)
+    .post("/api/articles/9/comments")
+    .send({username: "icellusedkars", body: "This is a test comment"})
+    .expect(201)
+    .then((response) => {
+      expect(response.body.comment).toEqual({
+        body: "This is a test comment",
+        votes: 0,
+        author: "icellusedkars",
+        article_id: 9,
+        created_at: expect.any(String),
+        comment_id: expect.any(Number)
+      })
+    })
+  });
+  test('POST: 400 responds with error message when given malformed comment', () => {
+    return request(app)
+    .post("/api/articles/2/comments")
+    .send({name: "icellusedkars", body: "Still a test comment"})
+    .expect(400)
+    .then((response) => {
+      expect(response.body.msg).toEqual("Bad request")
+    })
+  });
+  test('POST: 404 responds with error message when id not found', () => {
+    return request(app)
+    .post("/api/articles/353/comments")
+    .send({username: "icellusedkars", body: "This is a test comment"})
+    .expect(404)
+    .then((response) => {
+      expect(response.body.msg).toEqual("Article ID not found")
+    })
+  });
+  test('POST: 404 responds with error message when username not found', () => {
+    return request(app)
+    .post("/api/articles/2/comments")
+    .send({username: "userA", body: "This is a test comment"})
+    .expect(404)
+    .then((response) => {
+      expect(response.body.msg).toEqual("Required request details not found")
+    })
+  });
 });
