@@ -32,4 +32,22 @@ function insertCommentByArticleId(name, body, id) {
       return rows[0];
     });
 }
-module.exports = { selectCommentsByArticleID, insertCommentByArticleId };
+
+function sqlDeleteCommentByCommentID(id) {
+  return db.query(
+    `
+    DELETE FROM comments
+    WHERE comment_id = $1;
+    `,
+    [id]
+  )
+  .then(({rowCount}) => {
+    if(rowCount === 0) return Promise.reject({status: 404, msg: "Comment ID not found"});
+    return;
+  });
+}
+module.exports = {
+  selectCommentsByArticleID,
+  insertCommentByArticleId,
+  sqlDeleteCommentByCommentID,
+};
