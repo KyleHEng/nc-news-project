@@ -158,7 +158,7 @@ describe("/api/articles", () => {
         });
       });
   });
-  describe(`Queries. Order defaults to descending order`, () => {
+  describe(`sort_by queries. Order defaults to descending order`, () => {
     test("query = title", () => {
       return request(app)
         .get("/api/articles?sort_by=title&order=desc")
@@ -227,6 +227,37 @@ describe("/api/articles", () => {
           expect(response.body.articles).toBeSortedBy("created_at", {
             descending: true,
           });
+        });
+    });
+  });
+  describe("topic query. Filters by given topic", () => {
+    test("topic = cats", () => {
+      return request(app)
+        .get("/api/articles?topic=cats")
+        .expect(200)
+        .then((response) => {
+          expect(response.body.articles).toEqual([
+            {
+              title: "UNCOVERED: catspiracy to bring down democracy",
+              topic: "cats",
+              author: "rogersop",
+              body: "Bastet walks amongst us, and the cats are taking arms!",
+              created_at: expect.any(String),
+              votes: 0,
+              article_img_url:
+                "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+              article_id: 5,
+              comment_count: 2,
+            },
+          ]);
+        });
+    });
+    test("topic = doesntExist, Should respond with an empty array", () => {
+      return request(app)
+        .get("/api/articles?topic=doesntExist")
+        .expect(200)
+        .then((response) => {
+          expect(response.body.articles).toEqual([]);
         });
     });
   });

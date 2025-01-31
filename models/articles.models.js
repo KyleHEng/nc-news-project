@@ -15,13 +15,21 @@ function selectArticlesByID(id) {
 function selectArticles(queries) {
   let sort_by = queries.sort_by || "created_at";
   let order = queries.order || "desc";
+  const topic = queries.topic;
 
   let SQLString = `
         SELECT articles.*, COUNT(comment_id)::INT as comment_count 
         FROM articles 
         JOIN comments ON comments.article_id = articles.article_id
-        GROUP BY articles.article_id
         `;
+
+  const dbArgs = [];
+  if (topic) {
+    SQLString += `WHERE topic = $1 `;
+    dbArgs.push(topic);
+  }
+
+  SQLString += "GROUP BY articles.article_id ";
 
   if (sort_by) {
     const validColumnNamesToSortBy = [
@@ -44,7 +52,7 @@ function selectArticles(queries) {
     SQLString += ` ${order}`;
   }
 
-  return db.query(SQLString).then(({ rows }) => {
+  return db.query(SQLString, dbArgs).then(({ rows }) => {
     return rows;
   });
 }
