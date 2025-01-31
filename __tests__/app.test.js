@@ -133,7 +133,7 @@ describe("/api/articles/:article_id", () => {
 });
 
 describe("/api/articles", () => {
-  test("GET: 200 responds with an articles array of article objects with correct properties", () => {
+  test("GET: 200 responds with an articles array of article objects with correct properties. Defaults to created_at in desc order.", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
@@ -153,7 +153,82 @@ describe("/api/articles", () => {
             })
           );
         });
+        expect(response.body.articles).toBeSortedBy("created_at", {
+          descending: true,
+        });
       });
+  });
+  describe(`Queries. Order defaults to descending order`, () => {
+    test("query = title", () => {
+      return request(app)
+        .get("/api/articles?sort_by=title&order=desc")
+        .expect(200)
+        .then((response) => {
+          expect(response.body.articles).toBeSortedBy("title", {
+            descending: true,
+          });
+        });
+    });
+    test("query = topic", () => {
+      return request(app)
+        .get("/api/articles?sort_by=topic")
+        .expect(200)
+        .then((response) => {
+          expect(response.body.articles).toBeSortedBy("topic", {
+            descending: true,
+          });
+        });
+    });
+    test("query = author", () => {
+      return request(app)
+        .get("/api/articles?sort_by=author&order=asc")
+        .expect(200)
+        .then((response) => {
+          expect(response.body.articles).toBeSortedBy("author", {
+            ascending: true,
+          });
+        });
+    });
+    test("query = created_at", () => {
+      return request(app)
+        .get("/api/articles?sort_by=created_at&order=asc")
+        .expect(200)
+        .then((response) => {
+          expect(response.body.articles).toBeSortedBy("created_at", {
+            ascending: true,
+          });
+        });
+    });
+    test("query = votes", () => {
+      return request(app)
+        .get("/api/articles?sort_by=votes")
+        .expect(200)
+        .then((response) => {
+          expect(response.body.articles).toBeSortedBy("votes", {
+            descending: true,
+          });
+        });
+    });
+    test("query = comment_count", () => {
+      return request(app)
+        .get("/api/articles?sort_by=comment_count&order=asc")
+        .expect(200)
+        .then((response) => {
+          expect(response.body.articles).toBeSortedBy("comment_count", {
+            ascending: true,
+          });
+        });
+    });
+    test("query = notAQuery, order = notAnOrder, defaults to created_at in descending order", () => {
+      return request(app)
+        .get("/api/articles?sort_by=notAQuery&order=notAnOrder")
+        .expect(200)
+        .then((response) => {
+          expect(response.body.articles).toBeSortedBy("created_at", {
+            descending: true,
+          });
+        });
+    });
   });
 });
 

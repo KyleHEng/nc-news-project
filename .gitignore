@@ -2,3 +2,4 @@ node_modules
 .env.*
 testing.sql
 testSQL.md
+testSQL.json

@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const { sort } = require("../db/data/test-data/articles");
 const { checkArticleID } = require("../utils");
 
 function selectArticlesByID(id) {
@@ -11,19 +12,41 @@ function selectArticlesByID(id) {
     });
 }
 
-function selectArticles() {
-  return db
-    .query(
-      `
+function selectArticles(queries) {
+  let sort_by = queries.sort_by || "created_at";
+  let order = queries.order || "desc";
+
+  let SQLString = `
         SELECT articles.*, COUNT(comment_id)::INT as comment_count 
         FROM articles 
         JOIN comments ON comments.article_id = articles.article_id
-        GROUP BY articles.article_id;
-        `
-    )
-    .then(({ rows }) => {
-      return rows;
-    });
+        GROUP BY articles.article_id
+        `;
+
+  if (sort_by) {
+    const validColumnNamesToSortBy = [
+      "title",
+      "topic",
+      "author",
+      "created_at",
+      "votes",
+      "comment_count",
+    ];
+
+    if (!validColumnNamesToSortBy.includes(sort_by)) {
+      sort_by = "created_at";
+    }
+    SQLString += ` ORDER BY ${sort_by}`;
+
+    if (order !== "desc" && order !== "asc") {
+      order = "desc";
+    }
+    SQLString += ` ${order}`;
+  }
+
+  return db.query(SQLString).then(({ rows }) => {
+    return rows;
+  });
 }
 
 function updateArticleByArticleID(voteIncrement, id) {

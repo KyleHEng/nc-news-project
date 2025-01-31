@@ -17,7 +17,8 @@ function getArticlesByID(req, res, next) {
 }
 
 function getArticles(req, res, next) {
-  return selectArticles()
+  const queries = req.query;
+  return selectArticles(queries)
     .then((articleInfo) => {
       res.status(200).send({ articles: articleInfo });
     })
