@@ -257,20 +257,39 @@ describe("/api/comments/:comment_id", () => {
         expect(response.body).toEqual({});
       });
   });
-  test('DELETE: 400 responds with error message for malformed parameter', () => {
+  test("DELETE: 400 responds with error message for malformed parameter", () => {
     return request(app)
-    .delete("/api/comments/dkoke")
-    .expect(400)
-    .then((response) => {
-      expect(response.body.msg).toEqual("Bad request")
-    })
+      .delete("/api/comments/dkoke")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toEqual("Bad request");
+      });
   });
-  test('DELETE: 404 responds with error message when comment id not found', () => {
+  test("DELETE: 404 responds with error message when comment id not found", () => {
     return request(app)
-    .delete("/api/comments/888")
-    .expect(404)
-    .then((response) => {
-      expect(response.body.msg).toEqual("Comment ID not found")
-    })
+      .delete("/api/comments/888")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toEqual("Comment ID not found");
+      });
+  });
+});
+
+describe("/api/users", () => {
+  test("GET: 200 responds with an array of user objects", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((response) => {
+        response.body.users.forEach((user) => {
+          expect(user).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String),
+            })
+          );
+        });
+      });
   });
 });

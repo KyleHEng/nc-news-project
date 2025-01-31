@@ -11,6 +11,7 @@ const {
   postCommentByArticleId,
   deleteCommentByCommentID,
 } = require("./controllers/comments.controller");
+const { getUsers } = require("./controllers/users.controller");
 
 const app = express();
 
@@ -33,6 +34,8 @@ app.post("/api/articles/:article_id/comments", postCommentByArticleId);
 app.patch("/api/articles/:article_id", patchArticleByArticleID);
 
 app.delete("/api/comments/:comment_id", deleteCommentByCommentID);
+
+app.get("/api/users", getUsers);
 //error handling middleware
 app.all("*", (req, res) => {
   res.status(404).send({ error: "Endpoint not found" });
