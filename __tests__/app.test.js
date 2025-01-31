@@ -247,3 +247,30 @@ describe("/api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("/api/comments/:comment_id", () => {
+  test("DELETE: 204 responds with no content", () => {
+    return request(app)
+      .delete("/api/comments/1")
+      .expect(204)
+      .then((response) => {
+        expect(response.body).toEqual({});
+      });
+  });
+  test('DELETE: 400 responds with error message for malformed parameter', () => {
+    return request(app)
+    .delete("/api/comments/dkoke")
+    .expect(400)
+    .then((response) => {
+      expect(response.body.msg).toEqual("Bad request")
+    })
+  });
+  test('DELETE: 404 responds with error message when comment id not found', () => {
+    return request(app)
+    .delete("/api/comments/888")
+    .expect(404)
+    .then((response) => {
+      expect(response.body.msg).toEqual("Comment ID not found")
+    })
+  });
+});
