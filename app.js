@@ -1,9 +1,4 @@
 const express = require("express");
-
-const {
-  deleteCommentByCommentID,
-} = require("./controllers/comments.controller");
-const { getUsers } = require("./controllers/users.controller");
 const cors = require("cors");
 const app = express();
 app.use(cors());
@@ -13,11 +8,6 @@ const apiRouter = require("./routes/api-router");
 
 app.use("/api", apiRouter);
 
-// app.get("/api/topics", getTopics);
-
-app.delete("/api/comments/:comment_id", deleteCommentByCommentID);
-
-app.get("/api/users", getUsers);
 //error handling middleware
 app.all("*", (req, res) => {
   res.status(404).send({ error: "Endpoint not found" });
