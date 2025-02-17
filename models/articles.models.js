@@ -1,5 +1,4 @@
 const db = require("../db/connection");
-const { sort } = require("../db/data/test-data/articles");
 const { checkArticleID } = require("../utils");
 
 function selectArticlesByID(id) {
@@ -7,7 +6,7 @@ function selectArticlesByID(id) {
     .query(
       `SELECT articles.*, COUNT(comment_id)::INT as comment_count
   FROM articles
-  JOIN comments ON comments.article_id = articles.article_id
+  LEFT JOIN comments ON comments.article_id = articles.article_id
   WHERE articles.article_id = $1
   GROUP BY articles.article_id`,
       [id]
