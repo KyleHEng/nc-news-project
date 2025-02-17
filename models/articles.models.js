@@ -27,7 +27,7 @@ function selectArticles(queries) {
   let SQLString = `
         SELECT articles.*, COUNT(comment_id)::INT as comment_count 
         FROM articles 
-        JOIN comments ON comments.article_id = articles.article_id
+        LEFT JOIN comments ON comments.article_id = articles.article_id
         `;
 
   const dbArgs = [];

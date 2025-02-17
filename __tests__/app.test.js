@@ -139,6 +139,8 @@ describe("/api/articles", () => {
       .get("/api/articles")
       .expect(200)
       .then((response) => {
+        expect(response.body.articles.length).toEqual(13);
+
         response.body.articles.forEach((article) => {
           expect(article).toEqual(
             expect.objectContaining({
@@ -388,6 +390,7 @@ describe("/api/users", () => {
       .get("/api/users")
       .expect(200)
       .then((response) => {
+        expect(response.body.users.length).not.toBe(0);
         response.body.users.forEach((user) => {
           expect(user).toEqual(
             expect.objectContaining({
