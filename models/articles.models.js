@@ -83,8 +83,26 @@ function updateArticleByArticleID(voteIncrement, id) {
   });
 }
 
+function insertArticle(author, title, body, topic) {
+  return db
+    .query(
+      `
+    INSERT INTO articles
+      (author, title, body, topic)
+    VALUES
+      ($1, $2, $3, $4)
+    RETURNING *;
+    `,
+      [author, title, body, topic]
+    )
+    .then(({ rows }) => {
+      rows[0].comment_count = 0;
+      return rows[0];
+    });
+}
 module.exports = {
   selectArticlesByID,
   selectArticles,
   updateArticleByArticleID,
+  insertArticle,
 };

@@ -198,5 +198,23 @@
       "votes": 17,
       "created_at": "2020-04-06T12:17:00.000Z"
     }
-  }
+  },
+  "POST /api/articles": {
+    "description": "sends a post object for a new articles and responds with an article object for it if successful",
+    "exampleRequest": {
+      "author": "butter_bridge",
+      "title": "This is a new post",
+      "body": "Doremi",
+      "topic": "cats"
+    },
+    "exampleResponse":{
+      "author": "butter_bridge",
+      "title": "This is a new post",
+      "body": "Doremi",
+      "topic": "cats",
+      "article_id": 34,
+      "votes": 0,
+      "created_at": "2024-05-07T12:17:00.000Z",
+      "comment_count": 0
+  }}
 }

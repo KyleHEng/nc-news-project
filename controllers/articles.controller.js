@@ -2,6 +2,7 @@ const {
   selectArticlesByID,
   selectArticles,
   updateArticleByArticleID,
+  insertArticle,
 } = require("../models/articles.models");
 
 function getArticlesByID(req, res, next) {
@@ -40,4 +41,21 @@ function patchArticleByArticleID(req, res, next) {
     });
 }
 
-module.exports = { getArticlesByID, getArticles, patchArticleByArticleID };
+function postArticle(req, res, next) {
+  const requestBody = req.body;
+  const { author, title, body, topic } = requestBody;
+
+  return insertArticle(author, title, body, topic)
+    .then((articleInfo) => {
+      res.status(201).send({ article: articleInfo });
+    })
+    .catch((error) => {
+      next(error);
+    });
+}
+module.exports = {
+  getArticlesByID,
+  getArticles,
+  patchArticleByArticleID,
+  postArticle,
+};

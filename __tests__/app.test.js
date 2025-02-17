@@ -264,6 +264,31 @@ describe("/api/articles", () => {
         });
     });
   });
+  test("POST: 201 takes request object with correct properties and responds with article object with correct properties", () => {
+    return request(app)
+      .post("/api/articles")
+      .send({
+        author: "butter_bridge",
+        title: "This is a new post",
+        body: "Doremi",
+        topic: "cats",
+      })
+      .expect(201)
+      .then(({ body: { article } }) => {
+        expect(article).toEqual(
+          expect.objectContaining({
+            author: "butter_bridge",
+            title: "This is a new post",
+            body: "Doremi",
+            topic: "cats",
+            article_id: expect.any(Number),
+            votes: 0,
+            created_at: expect.any(String),
+            comment_count: 0,
+          })
+        );
+      });
+  });
 });
 
 describe("/api/articles/:article_id/comments", () => {
