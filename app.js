@@ -1,14 +1,6 @@
 const express = require("express");
-const endpoints = require("./endpoints.json");
-const { getTopics } = require("./controllers/topics.controller");
+
 const {
-  getArticlesByID,
-  getArticles,
-  patchArticleByArticleID,
-} = require("./controllers/articles.controller");
-const {
-  getCommentsByArticleID,
-  postCommentByArticleId,
   deleteCommentByCommentID,
 } = require("./controllers/comments.controller");
 const { getUsers } = require("./controllers/users.controller");
@@ -17,21 +9,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get("/api", (req, res) => {
-  res.status(200).send({ endpoints });
-});
+const apiRouter = require("./routes/api-router");
 
-app.get("/api/topics", getTopics);
+app.use("/api", apiRouter);
 
-app.get("/api/articles/:article_id", getArticlesByID);
-
-app.get("/api/articles", getArticles);
-
-app.get("/api/articles/:article_id/comments", getCommentsByArticleID);
-
-app.post("/api/articles/:article_id/comments", postCommentByArticleId);
-
-app.patch("/api/articles/:article_id", patchArticleByArticleID);
+// app.get("/api/topics", getTopics);
 
 app.delete("/api/comments/:comment_id", deleteCommentByCommentID);
 
