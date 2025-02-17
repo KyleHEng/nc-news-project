@@ -2,6 +2,7 @@ const {
   selectCommentsByArticleID,
   insertCommentByArticleId,
   sqlDeleteCommentByCommentID,
+  updateCommentByCommentID,
 } = require("../models/comments.models");
 
 function getCommentsByArticleID(req, res, next) {
@@ -40,8 +41,22 @@ function deleteCommentByCommentID(req, res, next) {
       next(error);
     });
 }
+
+function patchCommentByCommentID(req, res, next) {
+  const { comment_id } = req.params;
+  const { inc_votes } = req.body;
+
+  return updateCommentByCommentID(comment_id, inc_votes)
+    .then((commentInfo) => {
+      res.status(200).send({ comment: commentInfo });
+    })
+    .catch((error) => {
+      next(error);
+    });
+}
 module.exports = {
   getCommentsByArticleID,
   postCommentByArticleId,
   deleteCommentByCommentID,
+  patchCommentByCommentID,
 };

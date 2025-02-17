@@ -48,8 +48,26 @@ function sqlDeleteCommentByCommentID(id) {
       return;
     });
 }
+
+function updateCommentByCommentID(id, inc_vote) {
+  return db
+    .query(
+      `
+    UPDATE comments
+    SET
+      votes = votes + $1
+    WHERE comment_id = $2
+    RETURNING *;
+    `,
+      [inc_vote, id]
+    )
+    .then(({ rows }) => {
+      return rows[0];
+    });
+}
 module.exports = {
   selectCommentsByArticleID,
   insertCommentByArticleId,
   sqlDeleteCommentByCommentID,
+  updateCommentByCommentID,
 };

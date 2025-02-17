@@ -382,6 +382,33 @@ describe("/api/comments/:comment_id", () => {
         expect(response.body.msg).toEqual("Comment ID not found");
       });
   });
+  test("PATCH: 200 responds with an updated comment object with the correct properties", () => {
+    return request(app)
+      .patch("/api/comments/1")
+      .send({ inc_votes: 1 })
+      .expect(200)
+      .then(({ body: { comment } }) => {
+        expect(comment).toEqual(
+          expect.objectContaining({
+            comment_id: 1,
+            body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+            article_id: 9,
+            author: "butter_bridge",
+            votes: 17,
+            created_at: expect.any(String),
+          })
+        );
+      });
+  });
+  test("PATCH: 400 responds with error message when given malformed request data", () => {
+    return request(app)
+      .patch("/api/comments/1")
+      .send({ incremental_votes: 1 })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toEqual("Bad request");
+      });
+  });
 });
 
 describe("/api/users", () => {
