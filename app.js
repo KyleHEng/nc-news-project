@@ -12,9 +12,9 @@ const {
   deleteCommentByCommentID,
 } = require("./controllers/comments.controller");
 const { getUsers } = require("./controllers/users.controller");
-
+const cors = require("cors");
 const app = express();
-
+app.use(cors());
 app.use(express.json());
 
 app.get("/api", (req, res) => {
