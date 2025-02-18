@@ -136,7 +136,7 @@ describe("/api/articles/:article_id", () => {
 describe("/api/articles", () => {
   test("GET: 200 responds with an articles array of article objects with correct properties. Defaults to created_at in desc order.", () => {
     return request(app)
-      .get("/api/articles")
+      .get("/api/articles?limit=100000")
       .expect(200)
       .then((response) => {
         expect(response.body.articles.length).toEqual(13);
@@ -288,6 +288,17 @@ describe("/api/articles", () => {
           })
         );
       });
+  });
+  describe("Pagination", () => {
+    test(`Accepts the following queries: limit, which limits the number of responses (defaults to 10).
+  p, stands for page and specifies the page at which to start (calculated using limit).`, () => {
+      return request(app)
+        .get("/api/articles?limit=5&p=2")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles.length).toEqual(5);
+        });
+    });
   });
 });
 

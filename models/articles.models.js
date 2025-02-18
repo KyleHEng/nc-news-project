@@ -22,6 +22,9 @@ function selectArticles(queries) {
   let sort_by = queries.sort_by || "created_at";
   let order = queries.order || "desc";
   const topic = queries.topic;
+  const limitForResults = +queries.limit || 10;
+  const pageSelected = queries.p || 1;
+  const offSet = limitForResults * (pageSelected - 1);
 
   let sqlString = `
         SELECT articles.*, COUNT(comment_id)::INT as comment_count 
@@ -57,6 +60,9 @@ function selectArticles(queries) {
     }
     sqlString += ` ${order}`;
   }
+
+  sqlString += ` LIMIT $${dbArgs.length + 1} OFFSET $${dbArgs.length + 2}`;
+  dbArgs.push(limitForResults, offSet);
 
   return db.query(sqlString, dbArgs).then(({ rows }) => {
     return rows;
