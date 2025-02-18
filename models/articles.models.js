@@ -23,7 +23,7 @@ function selectArticles(queries) {
   let order = queries.order || "desc";
   const topic = queries.topic;
 
-  let SQLString = `
+  let sqlString = `
         SELECT articles.*, COUNT(comment_id)::INT as comment_count 
         FROM articles 
         LEFT JOIN comments ON comments.article_id = articles.article_id
@@ -31,11 +31,11 @@ function selectArticles(queries) {
 
   const dbArgs = [];
   if (topic) {
-    SQLString += `WHERE topic = $1 `;
+    sqlString += `WHERE topic = $1 `;
     dbArgs.push(topic);
   }
 
-  SQLString += "GROUP BY articles.article_id ";
+  sqlString += "GROUP BY articles.article_id ";
 
   if (sort_by) {
     const validColumnNamesToSortBy = [
@@ -50,15 +50,15 @@ function selectArticles(queries) {
     if (!validColumnNamesToSortBy.includes(sort_by)) {
       sort_by = "created_at";
     }
-    SQLString += ` ORDER BY ${sort_by}`;
+    sqlString += ` ORDER BY ${sort_by}`;
 
     if (order !== "desc" && order !== "asc") {
       order = "desc";
     }
-    SQLString += ` ${order}`;
+    sqlString += ` ${order}`;
   }
 
-  return db.query(SQLString, dbArgs).then(({ rows }) => {
+  return db.query(sqlString, dbArgs).then(({ rows }) => {
     return rows;
   });
 }
