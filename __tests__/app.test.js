@@ -391,6 +391,15 @@ describe("/api/articles/:article_id/comments", () => {
         expect(response.body.msg).toEqual("Required request details not found");
       });
   });
+  // describe.only("sort_by queries, defaults to descending order", () => {
+  //   test("query = votes", () => {
+  //     return request(app)
+  //       .get("/api/articles/1/comments?sort_by=votes")
+  //       .then(({ body: { comments } }) => {
+  //         expect(comments).toBeSortedBy("votes", { descending: true });
+  //       });
+  //   });
+  // });
 });
 
 describe("/api/comments/:comment_id", () => {

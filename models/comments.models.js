@@ -1,7 +1,7 @@
 const db = require("../db/connection");
 const { checkArticleID, checkUsername } = require("../utils");
 
-function selectCommentsByArticleID(id) {
+function selectCommentsByArticleID(id, queries) {
   return checkArticleID(id)
     .then(() => {
       return db.query(

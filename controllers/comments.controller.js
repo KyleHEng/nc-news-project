@@ -7,8 +7,9 @@ const {
 
 function getCommentsByArticleID(req, res, next) {
   const articleID = req.params.article_id;
+  const queries = req.query;
 
-  return selectCommentsByArticleID(articleID)
+  return selectCommentsByArticleID(articleID, queries)
     .then((commentInfo) => {
       res.status(200).send({ comments: commentInfo });
     })
