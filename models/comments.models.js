@@ -2,12 +2,27 @@ const db = require("../db/connection");
 const { checkArticleID, checkUsername } = require("../utils");
 
 function selectCommentsByArticleID(id, queries) {
+  let sort_by = queries.sort_by || "created_at";
+  let order = queries.order || "desc";
+  let sqlString = "SELECT * FROM comments WHERE article_id = $1";
+  const dbArgs = [id];
+  if (sort_by) {
+    const validColumnNamesToSortBy = ["author", "created_at", "votes"];
+
+    if (!validColumnNamesToSortBy.includes(sort_by)) {
+      sort_by = "created_at";
+    }
+    sqlString += ` ORDER BY ${sort_by}`;
+
+    if (order !== "desc" && order !== "asc") {
+      order = "desc";
+    }
+    sqlString += ` ${order}`;
+  }
+
   return checkArticleID(id)
     .then(() => {
-      return db.query(
-        "SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at ASC",
-        [id]
-      );
+      return db.query(sqlString, dbArgs);
     })
     .then(({ rows }) => {
       return rows;
